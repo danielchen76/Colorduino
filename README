@@ -4,3 +4,7 @@ Copyright (c) 2011 Sam C. Lin <lincomatic@hotmail.com>
 To install, copy libraries/Colorduino to your <arduino sketchbook folder>/libraries/Colorduino folder.
 ColorduinoPlasma.pde is a sample program which uses the library.  It displays an animated plasma on an 8x8 LED matrix
 
+2015.11.14
+1.fix init concurrent.
+2.add code in SetWhiteBal, cli() and sei() to protect write white balance byte to break by timer ISR.
+3.increase the LED line on time, then LED will much lighter.
