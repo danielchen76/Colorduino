@@ -34,6 +34,7 @@ void ColorduinoObject::LED_Delay(unsigned char i)
 // wbval[2]=blue
 void ColorduinoObject::SetWhiteBal(unsigned char wbval[3])
 {
+  cli();
   LED_LAT_CLR;
   LED_SLB_CLR;
   for(unsigned char k=0;k<ColorduinoScreenHeight;k++)
@@ -53,6 +54,7 @@ void ColorduinoObject::SetWhiteBal(unsigned char wbval[3])
     }
   }
   LED_SLB_SET;
+  sei();
 }
 
 /********************************************************
@@ -108,9 +110,12 @@ ISR(TIMER2_OVF_vect)          //Timer2  Service
  // 125KHz / 156 = 801.282Hz / 8 rows = 100.16Hz refresh rate
  // if TCNT2 = 61, ISR fires every 256 - 61 = 195 ticks
  // 125KHz / 195 = 641.026Hz / 8 rows = 80.128Hz refresh rate
-  //  TCNT2 = 100;
-  TCNT2 = 61;
-  close_all_lines;  
+  TCNT2 = 100;
+  //TCNT2 = 61;
+  
+  // delay close all lines, to make LED light for more time. 
+  // close all lines after all data send to DM163, and befor set data to display
+  //close_all_lines;  
   Colorduino.run();
   Colorduino.open_line(Colorduino.line);
   if (++Colorduino.line > 7) Colorduino.line = 0;
@@ -166,6 +171,7 @@ void ColorduinoObject::run()
     pixel++;
   }
   LED_LAT_SET;
+  close_all_lines;
   LED_LAT_CLR;
 }
 
